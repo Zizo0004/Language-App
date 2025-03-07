@@ -1,0 +1,8 @@
+/* Font definitions */
+@font-face {
+  font-family: 'Sherika';
+  src: url('./sherika-extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+} 
