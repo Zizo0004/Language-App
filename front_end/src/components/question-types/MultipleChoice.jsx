@@ -1,13 +1,26 @@
 import React, { useState, useRef } from 'react';
+import ProgressBar from '../ProgressBar';
 import '../Game.css';
+// Import the sound files
+import correctSound from '../../assets/sounds/correct.mp3';
+import wrongSound from '../../assets/sounds/wrong.mp3';
 
-const MultipleChoice = ({ question, options, onAnswer, correctAnswer }) => {
+const MultipleChoice = ({ 
+  question, 
+  options, 
+  onAnswer, 
+  correctAnswer, 
+  currentQuestion, 
+  totalQuestions, 
+  progressPercentage 
+}) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [feedbackType, setFeedbackType] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const correctSoundRef = useRef(null);
+  const wrongSoundRef = useRef(null);
 
   const handleOptionSelect = (option) => {
     if (isAnswered) return;
@@ -38,13 +51,14 @@ const MultipleChoice = ({ question, options, onAnswer, correctAnswer }) => {
     } else {
       setFeedbackMessage(`Incorrect. The correct answer is "${correctAnswer}".`);
       setFeedbackType('incorrect');
+      // Play wrong sound
+      if (wrongSoundRef.current) {
+        wrongSoundRef.current.currentTime = 0;
+        wrongSoundRef.current.play().catch(e => console.log('Error playing sound:', e));
+      }
     }
     
     setIsAnswered(true);
-  };
-
-  const handleNextQuestion = () => {
-    onAnswer(selectedOption);
   };
 
   const getOptionClass = (option) => {
@@ -65,8 +79,16 @@ const MultipleChoice = ({ question, options, onAnswer, correctAnswer }) => {
 
   return (
     <div className="question-type multiple-choice">
-      {/* Sound effect for correct answer */}
-      <audio ref={correctSoundRef} src="/sounds/correct-answer.mp3" preload="auto" />
+      {/* Progress Bar */}
+      <ProgressBar 
+        percentage={progressPercentage} 
+        currentQuestion={currentQuestion}
+        totalQuestions={totalQuestions}
+      />
+      
+      {/* Sound effects */}
+      <audio ref={correctSoundRef} src={correctSound} preload="auto" />
+      <audio ref={wrongSoundRef} src={wrongSound} preload="auto" />
       
       <h3 className="question-text">{question}</h3>
       
@@ -83,24 +105,24 @@ const MultipleChoice = ({ question, options, onAnswer, correctAnswer }) => {
         ))}
       </div>
       
-      {!isAnswered && (
-        <button 
-          className="submit-button"
-          onClick={handleSubmit}
-          disabled={!selectedOption}
-        >
-          Check Answer
-        </button>
-      )}
-      
-      {isAnswered && (
-        <div className={`feedback-message ${feedbackType} visible`}>
-          <div className="feedback-message-text">{feedbackMessage}</div>
-          <button className="feedback-next-button" onClick={handleNextQuestion}>
-            Next Question
-          </button>
-        </div>
-      )}
+      <div className="feedback-background">
+        <div className="feedback-button-container">
+          {/* div that has max width 600 */}
+            <button 
+              className="submit-button"
+              onClick={handleSubmit}
+              disabled={!selectedOption && !isAnswered}
+            >
+              {isAnswered ? 'Next Question' : 'Check Answer'}
+            </button>
+            
+            {feedbackMessage && (
+              <div className={`feedback-message ${feedbackType} ${isAnswered ? 'visible' : ''}`}>
+                {feedbackMessage}
+              </div>
+            )}
+          </div>
+      </div>
     </div>
   );
 };

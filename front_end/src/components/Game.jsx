@@ -32,7 +32,7 @@ const Game = () => {
       id: 3,
       type: 'audio',
       question: 'Listen and select the correct word',
-      audioUrl: '/audio/bonjour.mp3',
+      audioUrl: '/src/assets/sounds/bonjour.mp3',
       options: ['Hello', 'Goodbye', 'Thank you', 'Good morning'],
       correctAnswer: 'Hello',
       points: 15
@@ -115,6 +115,9 @@ const Game = () => {
             options={question.options}
             onAnswer={handleAnswer}
             correctAnswer={question.correctAnswer}
+            currentQuestion={currentQuestionIndex + 1}
+            totalQuestions={questions.length}
+            progressPercentage={progressPercentage}
           />
         );
       case 'pairing':
@@ -123,6 +126,9 @@ const Game = () => {
             question={question.question}
             pairs={question.pairs}
             onAnswer={handleAnswer}
+            currentQuestion={currentQuestionIndex + 1}
+            totalQuestions={questions.length}
+            progressPercentage={progressPercentage}
           />
         );
       case 'audio':
@@ -133,6 +139,9 @@ const Game = () => {
             options={question.options}
             onAnswer={handleAnswer}
             correctAnswer={question.correctAnswer}
+            currentQuestion={currentQuestionIndex + 1}
+            totalQuestions={questions.length}
+            progressPercentage={progressPercentage}
           />
         );
       default:
@@ -143,15 +152,7 @@ const Game = () => {
   return (
     <div className="game-container">
       {!gameCompleted ? (
-        <>
-          <ProgressBar 
-            percentage={progressPercentage} 
-            currentQuestion={currentQuestionIndex + 1}
-            totalQuestions={questions.length}
-          />
-          
-          {renderQuestion()}
-        </>
+        renderQuestion()
       ) : (
         <div className="game-completed">
           <h2>Completed!</h2>

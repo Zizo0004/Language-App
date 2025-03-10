@@ -5,11 +5,6 @@
   margin: 0 auto;
   padding: 0;
   background-color: transparent;
-  position: relative;
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 80px; /* Reserve space for the bottom bar */
 }
 
 /* Progress Bar Container - PRINCIPLE: VISUAL HIERARCHY & FEEDBACK */
@@ -18,6 +13,7 @@
   position: relative;
   margin-bottom: 40px;
   padding-bottom: 10px;
+  display: block;
 }
 
 /* Progress Bar - PRINCIPLE: VISUAL FEEDBACK */
@@ -28,6 +24,7 @@
   border-radius: 20px;
   overflow: hidden;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: block;
 }
 
 .progress-bar-fill {
@@ -36,6 +33,7 @@
   border-radius: 20px;
   transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 1px 3px rgba(193, 102, 48, 0.3);
+  min-width: 5px;
 }
 
 /* Question Counter - PRINCIPLE: CLEAR INFORMATION HIERARCHY */
@@ -52,9 +50,13 @@
 /* Question Types - Common Styles - PRINCIPLE: CONSISTENCY */
 .question-type {
   margin-top: 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+}
+
+/* Question Progress Bar - PRINCIPLE: VISUAL FEEDBACK */
+.question-type .progress-bar-container {
+  margin-bottom: 30px;
+  width: 100%;
+  display: block;
 }
 
 /* Question Text - PRINCIPLE: READABILITY & EMPHASIS */
@@ -70,31 +72,45 @@
   margin-right: auto;
 }
 
-/* Bottom Bar - PRINCIPLE: CONSISTENT POSITIONING */
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: flex-end;
+.feedback-background {
+  /* position: absolute; */
+  width: 100%;
+  left: 0px;
+  bottom: 0px;
+  height: 150px;
+  padding-left: 20px;
+  padding-right: 20px;
+  /* margin-top: 150px; */
+}
+
+/* Feedback and Button Container - PRINCIPLE: ALIGNMENT & ORGANIZATION */
+.feedback-button-container {
+  max-width: 700px;
+  /* margin: 0 auto; */
+  display: flex
+;
   align-items: center;
-  background-color: transparent;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  z-index: 100;
-}
-
-.bottom-bar.answered {
   justify-content: space-between;
+  flex-direction: row-reverse;
+  left: 0px;
+  bottom: 0px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  padding-top: 50px;
 }
 
-.bottom-bar.correct {
-  background-color: #4caf50;
+.feedback-button-container .feedback-message {
+  margin: 0;
+  min-width: 250px;
+  order: 2;
 }
 
-.bottom-bar.incorrect {
-  background-color: #e57373;
+.feedback-button-container .submit-button {
+  margin: 0;
+  min-width: 180px;
+  order: 1;
 }
 
 /* Submit Button - PRINCIPLE: CLEAR CALL TO ACTION & AFFORDANCE */
@@ -107,10 +123,11 @@
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
+  margin: 50px auto 0;
+  display: block;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 6px 15px rgba(193, 102, 48, 0.2);
   position: relative;
-  overflow: hidden;
   letter-spacing: 0.5px;
 }
 
@@ -139,7 +156,6 @@
   flex-direction: column;
   gap: 16px;
   max-width: 600px;
-  width: 100%;
   margin: 0 auto;
 }
 
@@ -157,7 +173,6 @@
   position: relative;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
-  width: 100%;
 }
 
 .option:hover {
@@ -206,7 +221,6 @@
   z-index: 1;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  flex-shrink: 0;
 }
 
 .option.selected .option-letter {
@@ -245,7 +259,6 @@
   justify-content: space-between;
   gap: 30px;
   max-width: 700px;
-  width: 100%;
   margin: 0 auto;
 }
 
@@ -256,7 +269,6 @@
   border-radius: 14px;
   padding: 24px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  width: 100%;
 }
 
 .terms-column h4, .translations-column h4 {
@@ -288,7 +300,6 @@
   overflow: hidden;
   -webkit-tap-highlight-color: transparent; /* Prevents default mobile highlight */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-  width: 100%;
 }
 
 .pairing-item:hover:not(.matched):not(.selected) {
@@ -342,29 +353,36 @@
 }
 
 /* Feedback Message - PRINCIPLE: CLEAR FEEDBACK */
-.feedback-message-text {
+.feedback-message {
+  text-align: center;
+  margin: 20px 0;
+  padding: 12px 20px;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 16px;
-  text-align: left;
-  flex: 1;
-  color: white;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.feedback-next-button {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-left: 20px;
+.feedback-message.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.feedback-next-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+.feedback-message.correct {
+  background-color: #f1f8e9;
+  color: #2e7d32;
+  border: 1px solid #c5e1a5;
+}
+
+.feedback-message.incorrect {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
 }
 
 /* Pairing Progress - PRINCIPLE: CLEAR FEEDBACK */
@@ -497,7 +515,7 @@
 /* Responsive Design - PRINCIPLE: ACCESSIBILITY & USABILITY */
 @media (max-width: 768px) {
   .game-container {
-    padding: 0 15px 80px;
+    padding: 0 15px;
   }
   
   .pairing-container {
@@ -521,17 +539,24 @@
     font-size: 16px;
   }
 
-  .bottom-bar {
-    padding: 15px;
+  .feedback-message {
+    font-size: 14px;
+    padding: 10px 15px;
   }
   
-  .feedback-message-text {
-    font-size: 14px;
+  .feedback-button-container {
+    flex-direction: column;
+    gap: 15px;
   }
   
-  .feedback-next-button {
-    padding: 8px 16px;
-    font-size: 14px;
+  .feedback-button-container .feedback-message {
+    text-align: center;
+    order: 2;
+  }
+  
+  .feedback-button-container .submit-button {
+    width: 100%;
+    order: 1;
   }
 }
 
