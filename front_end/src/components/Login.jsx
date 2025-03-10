@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './Auth.css';
 
-const Login = ({ navigateTo }) => {
+const Login = ({ navigateTo, onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,6 +15,10 @@ const Login = ({ navigateTo }) => {
     // Handle login logic here
     console.log('Login attempt with:', { email, password });
     setError('');
+    
+    // For demo purposes, we'll just call onLogin directly
+    // In a real app, you would validate credentials with a backend
+    onLogin();
   };
 
   return (

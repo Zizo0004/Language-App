@@ -21,6 +21,9 @@ const Register = ({ navigateTo }) => {
     // Handle registration logic here
     console.log('Registration attempt with:', { name, email, password });
     setError('');
+    
+    // Navigate back to login page after successful registration
+    navigateTo('login');
   };
 
   return (
@@ -35,7 +38,7 @@ const Register = ({ navigateTo }) => {
       <div className="auth-form-container">
         <div className="auth-form-wrapper">
           <h1 className="auth-title">Create Account</h1>
-          <p className="auth-subtitle">Join our community today</p>
+          {/* <p className="auth-subtitle">Join our community today</p> */}
           
           {error && <div className="auth-error">{error}</div>}
           
