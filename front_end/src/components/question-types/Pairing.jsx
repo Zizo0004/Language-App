@@ -1,7 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ProgressBar from '../ProgressBar';
 import '../Game.css';
+// Import the sound files
+import correctSound from '../../assets/sounds/correct.mp3';
+import wrongSound from '../../assets/sounds/wrong.mp3';
 
-const Pairing = ({ question, pairs, onAnswer }) => {
+const Pairing = ({ 
+  question, 
+  pairs, 
+  onAnswer,
+  currentQuestion, 
+  totalQuestions, 
+  progressPercentage 
+}) => {
   const [terms, setTerms] = useState([]);
   const [translations, setTranslations] = useState([]);
   const [selectedTerm, setSelectedTerm] = useState(null);
@@ -61,24 +72,22 @@ const Pairing = ({ question, pairs, onAnswer }) => {
     
     if (correctTranslation.translation === translation.translation) {
       // It's a match!
-      const newMatchedPairs = [...matchedPairs, { 
+      setMatchedPairs([...matchedPairs, { 
         term: term.term, 
         translation: translation.translation 
-      }];
-      
-      setMatchedPairs(newMatchedPairs);
+      }]);
       
       // Play correct sound
       if (correctSoundRef.current) {
         correctSoundRef.current.currentTime = 0;
         correctSoundRef.current.play().catch(e => console.log('Error playing sound:', e));
       }
-
+      
       // Check if all pairs are matched
+      const newMatchedPairs = [...matchedPairs, { term: term.term, translation: translation.translation }];
       if (newMatchedPairs.length === pairs.length) {
-        setFeedbackMessage('Great job! You matched all pairs correctly!');
+        setFeedbackMessage('Great job! All pairs matched correctly!');
         setFeedbackType('correct');
-        setIsAnswered(true);
       }
     } else {
       // Wrong match - show shake animation
@@ -106,8 +115,15 @@ const Pairing = ({ question, pairs, onAnswer }) => {
     }, 300);
   };
 
-  const handleNextQuestion = () => {
-    onAnswer(matchedPairs);
+  const handleSubmit = () => {
+    if (matchedPairs.length !== pairs.length && !isAnswered) return;
+    
+    if (isAnswered) {
+      // If already answered, proceed to next question
+      onAnswer(matchedPairs);
+    } else {
+      setIsAnswered(true);
+    }
   };
 
   const isTermSelected = (term) => {
@@ -131,9 +147,16 @@ const Pairing = ({ question, pairs, onAnswer }) => {
 
   return (
     <div className="question-type pairing">
+      {/* Progress Bar */}
+      <ProgressBar 
+        percentage={progressPercentage} 
+        currentQuestion={currentQuestion}
+        totalQuestions={totalQuestions}
+      />
+      
       {/* Sound effects */}
-      <audio ref={correctSoundRef} src="/sounds/correct-answer.mp3" preload="auto" />
-      <audio ref={wrongSoundRef} src="/sounds/wrong-answer.mp3" preload="auto" />
+      <audio ref={correctSoundRef} src={correctSound} preload="auto" />
+      <audio ref={wrongSoundRef} src={wrongSound} preload="auto" />
       
       <h3 className="question-text">{question}</h3>
       
@@ -177,27 +200,21 @@ const Pairing = ({ question, pairs, onAnswer }) => {
         </div>
       </div>
       
-      <div className="pairing-progress">
-        {matchedPairs.length} of {pairs.length} pairs matched
-      </div>
-      
-      {allPairsMatched && !isAnswered && (
+      <div className="feedback-button-container">
+        {feedbackMessage && (
+          <div className={`feedback-message ${feedbackType} ${allPairsMatched ? 'visible' : ''}`}>
+            {feedbackMessage}
+          </div>
+        )}
+        
         <button 
           className="submit-button"
-          onClick={() => setIsAnswered(true)}
+          onClick={handleSubmit}
+          disabled={matchedPairs.length !== pairs.length && !isAnswered}
         >
-          Next Question
+          {isAnswered || allPairsMatched ? 'Next Question' : 'Continue'}
         </button>
-      )}
-      
-      {isAnswered && (
-        <div className={`feedback-message ${feedbackType} visible`}>
-          <div className="feedback-message-text">{feedbackMessage}</div>
-          <button className="feedback-next-button" onClick={handleNextQuestion}>
-            Next Question
-          </button>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
