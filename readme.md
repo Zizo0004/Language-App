@@ -1,4 +1,4 @@
-# Khaleeji Language Learning App
+# Khaleeji Language Learning App 🐪
 
 ##  About the Project
 This is a web application designed to help users learn the **Khaleeji (Gulf) Arabic dialect**. The app provides an interactive and engaging way to master vocabulary, pronunciation, and conversational skills.
