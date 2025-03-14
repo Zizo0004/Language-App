@@ -2,8 +2,9 @@ from django.db import models
 # models for: # User # Most popular words # Category
 # The relationship between user and 'most popular words' and 'category' is many to many
 
-categories = ['business','culture','food','hospital','banking','job culture','conversation','questions']
+categories = [('business','business'),('culture','culture'),('food','food'),('hospital','hospital'),('banking','banking'),('job culture','job culture'),('conversation','conversation'),('questions','questions')]
 mutiple_choice = {'A': 'apple','B':'banana','C':'orange','D':'pear'}
+
 class most_popular_words(models.Model):
     word = models.CharField(max_length=50,primary_key=True)
     translation = models.CharField(max_length=50)
@@ -27,7 +28,7 @@ class User(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
     location = models.CharField(max_length=255) # allow if they allow
-    profile = models.CharField(max_length=50)
+    profile = models.CharField(max_length=50,default='john doe')
     most_popular_words = models.ManyToManyField(most_popular_words,blank=True)
     category = models.ManyToManyField(question,blank=True)
     status = models.BooleanField(default=False)
