@@ -7,7 +7,7 @@ import './App.css';
 function App() {
   const [currentPage, setCurrentPage] = useState('login');
 
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const navigateTo = (page) => {
     setCurrentPage(page);
