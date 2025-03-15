@@ -3,13 +3,13 @@ from django.db import models
 # The relationship between user and 'most popular words' and 'category' is many to many
 
 categories = [('business','business'),('culture','culture'),('food','food'),('hospital','hospital'),('banking','banking'),('job culture','job culture'),('conversation','conversation'),('questions','questions')]
-mutiple_choice = {'A': 'apple','B':'banana','C':'orange','D':'pear'}
+mutiple_choice = [('A','A'),('B','B'),('C','C'),('D','D')]
 
 class most_popular_words(models.Model):
     word = models.CharField(max_length=50,primary_key=True)
     translation = models.CharField(max_length=50)
-    grammar = models.CharField(max_length=50) # verbs, nouns, adjectives, adverbs etc...
-    mutiple_choice = models.CharField(max_length=50,choices=mutiple_choice)
+    grammar = models.CharField(max_length=25) # verbs, nouns, adjectives, adverbs etc...
+    mutiple_choice = models.CharField(max_length=2,choices=mutiple_choice)
     audio = models.BinaryField()
 
 class question(models.Model):
@@ -31,7 +31,6 @@ class User(models.Model):
     profile = models.CharField(max_length=50,default='john doe')
     most_popular_words = models.ManyToManyField(most_popular_words,blank=True)
     category = models.ManyToManyField(question,blank=True)
-    status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
