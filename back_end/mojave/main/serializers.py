@@ -19,10 +19,10 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = question
         fields = '__all__' 
 
-def deserialize_user(json_data):
-    stream = io.BytesIO(json_data)
-    data = JSONParser().parse(stream)
-    serializer = UserSerializer(data=data)
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username", "password", "email", "location"]
     
 
 
