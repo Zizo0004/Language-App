@@ -6,7 +6,6 @@ from rest_framework.authtoken.models import Token
 from .models import *
 from .serializers import *
 import json
-# Frontend needs: User data, most popular words, category
 
 @api_view(['GET'])
 def get_most_words(request):
@@ -17,11 +16,9 @@ def get_most_words(request):
 
 @api_view(['GET'])
 def get_questions(request):
-    user = User.objects.get(username="applePie")
-    user_questions = user.most_popular_words
-    print(user_questions)
-    return Response(status=status.HTTP_200_OK)
-    
+    get_category = question.objects.all()
+    serializer = QuestionSerializer(get_category, many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_user(request):
@@ -53,4 +50,36 @@ def get_user_data(request):
     user_questions = user.category.all()
     print(user_questions)
 
+@api_view(['POST'])
+def user_question_attempt(request):
+    user = User.objects.get(username=request.data["username"])
+    questions = question.objects.get(description=request.data["id"])
+    if request.data['marks'] == "True":
+        questions.status = True
+        user.category.add(question)
+    else:
+        question.status = False
+        user.category.add(question)
+    questions.save()
+    return Response(status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def user_word_attempt(request):
+    user = User.objects.get(username=request.data["username"])
+    word = most_popular_words.objects.get(word=request.data["word"])
+    print(word)
+    if request.data['marks'] == "True":
+        word.status = True
+        user.most_popular_words.add(word)
+    else:
+        word.status = False
+        user.most_popular_words.add(word)
+    word.save()
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def a(request):
+    user = User.objects.get(username=request.data["username"])
+    print(user.most_popular_words.all()[0].status)
+    return Response(status=status.HTTP_200_OK)
