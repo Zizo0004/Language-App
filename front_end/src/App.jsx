@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
 import Game from './components/Game';
+import Learn from './components/Learn';
+import MostWords from './components/MostWords';
 import './App.css';
 
 function App() {
@@ -15,7 +17,7 @@ function App() {
 
   const handleLogin = () => {
     setIsAuthenticated(true);
-    navigateTo('game');
+    navigateTo('learn');
   };
 
   return (
@@ -26,7 +28,11 @@ function App() {
           {currentPage === 'register' && <Register navigateTo={navigateTo} />}
         </>
       ) : (
-        <Game />
+        <>
+          {currentPage === 'learn' && <Learn navigateTo={navigateTo} />}
+          {currentPage === 'game' && <Game />}
+          {currentPage === 'most_words' && <MostWords />}
+        </>
       )}
     </div>
   );
