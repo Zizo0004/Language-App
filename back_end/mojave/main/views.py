@@ -33,10 +33,8 @@ def create_user(request):
         user = User.objects.create(username=request.data['username'], password=request.data['password'], email=request.data['email'])
         user.save()
         token = Token.objects.create(user=user)
-        print("User created successfully",serializer.data)
         return Response({"message":"User created successfully","token":token.key},status=status.HTTP_200_OK)
     else:
-        print(serializer.errors)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -57,36 +55,20 @@ def get_user_data(request):
     user_questions = user.category.all()
     print(user_questions)
 
-@api_view(['POST'])
-def user_question_attempt(request):
-    user = User.objects.get(username=request.data["username"])
-    questions = question.objects.get(description=request.data["id"])
-    if request.data['marks'] == "True":
-        questions.status = True
-        user.category.add(question)
-    else:
-        question.status = False
-        user.category.add(question)
-    questions.save()
-    return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-def user_word_attempt(request):
-    user = User.objects.get(username=request.data["username"])
-    word = most_popular_words.objects.get(word=request.data["word"])
-    print(word)
-    if request.data['marks'] == "True":
+@permission_classes([AllowAny])
+def attempt_question(request):
+    attempt_type = request.data["model"] # either question or most_popular_words
+    if attempt_type == "question":
+        question = question.objects.get(id=request.data["id"])
+        question.status = True
+        question.save()
+        return Response("message: question attempted successfully",status=status.HTTP_200_OK)
+    if attempt_type == "most_popular_words":
+        word = most_popular_words.objects.get(id=request.data["id"])
         word.status = True
-        user.most_popular_words.add(word)
+        word.save()
+        return Response("message: word attempted successfully",status=status.HTTP_200_OK)
     else:
-        word.status = False
-        user.most_popular_words.add(word)
-    word.save()
-    return Response(status=status.HTTP_200_OK)
-
-
-@api_view(['POST'])
-def a(request):
-    user = User.objects.get(username=request.data["username"])
-    print(user.most_popular_words.all()[0].status)
-    return Response(status=status.HTTP_200_OK)
+        return Response("message: invalid attempt type",status=status.HTTP_400_BAD_REQUEST)
