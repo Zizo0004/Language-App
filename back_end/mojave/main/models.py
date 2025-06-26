@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 # models for: # User # Most popular words # Category
 # The relationship between user and 'most popular words' and 'category' is many to many
 

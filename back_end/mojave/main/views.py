@@ -7,6 +7,8 @@ from .models import *
 from .serializers import *
 import json
 from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -23,15 +25,18 @@ def get_questions(request):
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def create_user(request):
     data = request.data
     serializer = CustomUserSerializer(data=data)
     if serializer.is_valid():
-        user = User.objects.create(username=request.data['username'], password=request.data['password'], email=request.data['email'],location=request.data['location'])
+        user = User.objects.create(username=request.data['username'], password=request.data['password'], email=request.data['email'])
+        user.save()
         token = Token.objects.create(user=user)
         print("User created successfully",serializer.data)
         return Response({"message":"User created successfully","token":token.key},status=status.HTTP_200_OK)
     else:
+        print(serializer.errors)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])

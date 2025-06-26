@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Auth.css';
+import axios from 'axios';
 
 const Register = ({ navigateTo }) => {
   const [name, setName] = useState('');
@@ -21,7 +22,10 @@ const Register = ({ navigateTo }) => {
     // Handle registration logic here
     console.log('Registration attempt with:', { name, email, password });
     setError('');
-    
+    axios.post('http://127.0.0.1:8000/create_user/',{username:name,email:email,password:password})
+  .then(response => {
+    console.log(response.data);
+  })
     // Navigate back to login page after successful registration
     navigateTo('login');
   };
