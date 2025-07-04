@@ -27,6 +27,7 @@ def get_questions(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_user(request):
+    print("CREATING USER")
     data = request.data
     serializer = CustomUserSerializer(data=data)
     if serializer.is_valid():

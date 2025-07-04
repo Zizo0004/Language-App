@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, CheckCircle, Sparkles, ArrowRight, Shield, Zap } from 'lucide-react';
 import './test.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
-  
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -39,11 +40,7 @@ export default function SignUpPage() {
     const newErrors = {};
     
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-    
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.firstName = 'Username is required';
     }
     
     if (!formData.email.trim()) {
@@ -58,12 +55,6 @@ export default function SignUpPage() {
       newErrors.password = 'Password must be at least 8 characters';
     }
     
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    
     if (!agreeToTerms) {
       newErrors.terms = 'Please accept our terms to continue';
     }
@@ -73,13 +64,27 @@ export default function SignUpPage() {
   
 
   const handleSubmit = async (e) => {
+    console.log("submit");
     e.preventDefault();
     
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
+      console.log(newErrors);
+      console.log(formData);
+
       setErrors(newErrors);
       return;
     }
+
+    /* request to backend */
+    axios.post('http://127.0.0.1:8000/create_user/',{username:formData.firstName,email:formData.email,password:formData.password})
+    .then(response => {
+      console.log(response.data);
+    })
+        // Uncaught (in promise) ReferenceError: navigateTo is not defined, explain this error
+        
+      navigate('/login');
+
     
     setIsLoading(true);
     
@@ -92,14 +97,17 @@ export default function SignUpPage() {
           firstName: '',
           lastName: '',
           email: '',
-          password: '',
-          confirmPassword: ''
+          password: ''
         });
         setAgreeToTerms(false);
         setShowSuccess(false);
       }, 4000);
     }, 2000);
+    
+
+  
   };
+
   useEffect(() => {
     console.log("page loaded");
     setIsLoaded(true);
@@ -226,37 +234,6 @@ export default function SignUpPage() {
                 )}
               </div>
 
-              {/* Confirm Password */}
-              <div className="input-group">
-                <label className="input-label">Confirm Password</label>
-                <div className="input-wrapper">
-                  <input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    onFocus={() => setFocusedField('confirmPassword')}
-                    onBlur={() => setFocusedField(null)}
-                    placeholder="Confirm your password"
-                    className={`form-input password-input ${errors.confirmPassword ? 'input-error' : ''} ${focusedField === 'confirmPassword' ? 'input-focused' : ''}`}
-                  />
-                  <button
-                    type="button"
-                    style={{ backgroundColor: 'transparent', border: 'none', outline: 'none' }}
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="password-toggle"
-                  >
-                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                  {focusedField === 'confirmPassword' && (
-                    <div className="input-glow"></div>
-                  )}
-                </div>
-                {errors.confirmPassword && (
-                  <p className="error-message">{errors.confirmPassword}</p>
-                )}
-              </div>
-
               {/* Terms Checkbox */}
               <div className="terms-section">
                 <div className="checkbox-wrapper">
@@ -305,7 +282,7 @@ export default function SignUpPage() {
             <div className="signin-section">
               <p className="signin-text">
                 Already have an account?{' '}
-                <a href="#" className="signin-link">Sign in</a>
+                <a href="/login" className="signin-link">Sign in</a>
               </p>
             </div>
           </div>

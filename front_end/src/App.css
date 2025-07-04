@@ -10,9 +10,9 @@
   padding: 0;
 }
 h1{
-  font-family: 'Crete Round', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-weight: 400 !important;
-  color: #ffffff;
+  font-family: 'sherika', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 700 !important;
+  color: #c1c1c1 !important;
 }
 
 .logo {
@@ -54,8 +54,8 @@ h1{
 
 
 /* App Container */
-/* App Container - Extra Dark Mode */
 .app-container {
+  overflow: hidden; /* clip the gradient overlay */
   min-height: 100vh;
   width: 100%;
   display: flex;
@@ -65,9 +65,9 @@ h1{
   position: relative;
   background: 
       /* Noise layer */
-      radial-gradient(circle at 20% 80%, rgba(80, 79, 150, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(150, 79, 150, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(80, 79, 150, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, #000814 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, #001d3d 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, #001219 0%, transparent 50%),
       
       /* Main gradient - Much darker */
       linear-gradient(135deg, 
@@ -75,28 +75,40 @@ h1{
           #0f0f1a 25%,
           #1a1a2e 50%,
           #2a1a3e 75%,
-          #3a1a4e 100%
+          #001219 100%
       );
   
-  padding: 30px;
+  /* padding: 30px; */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #ffffff; /* Ensure text is white */
+  /* animation: spin-hue 20s linear infinite; */
+}
+
+@keyframes spin-hue {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
 }
 
 .app-container::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-      radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.03) 2%, transparent 2%),
-      radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.02) 1%, transparent 1%);
-  background-size: 50px 50px, 100px 100px;
-  background-position: 0 0, 25px 25px;
-  animation: grain 8s steps(10) infinite;
+  inset: 0;
+  background: linear-gradient(135deg,
+    #001219 0%,
+    #2a1a3e 25%,
+    #1a1a2e 50%,
+    #0f0f1a 75%,
+    #001219 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  animation: fade 10s ease-in-out infinite;
   z-index: 0;
+}
+
+@keyframes fade {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 1; }
 }
 
 .app-container::after {
@@ -140,19 +152,6 @@ body {
   color: #333;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   overflow-x: hidden;
-}
-
-/* Add a subtle pattern overlay */
-.app-container::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: -1;
 }
 
 /* Responsive adjustments */

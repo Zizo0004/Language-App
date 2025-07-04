@@ -17,7 +17,7 @@ function App() {
 
   return (
     <Router>
-      <div className="app-container">
+      <div className="app-container ">
         <Routes>
           {/* Public routes that redirect if authenticated */}
           <Route 

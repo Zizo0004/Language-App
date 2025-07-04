@@ -22,8 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('most_words/', get_most_words),
     path('questions/', get_questions),
-    path('create_user/', create_user),
-    path('user_question',user_question_attempt),
-    path('user_word',user_word_attempt),
-    path('a',a)
+    path('create_user/', create_user)
 ]
