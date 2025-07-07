@@ -9,7 +9,6 @@ export default function Login() {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [focusedField, setFocusedField] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleInputChange = (e) => {
@@ -73,12 +72,9 @@ export default function Login() {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      onFocus={() => setFocusedField('firstName')}
-                      onBlur={() => setFocusedField(null)}
                       placeholder="John"
-                      className={`form-input ${errors.firstName ? 'input-error' : ''} ${focusedField === 'firstName' ? 'input-focused' : ''}`}
+                      className={`form-input ${errors.firstName ? 'input-error' : ''}`}
                     />
-                    {focusedField === 'firstName' && <div className="input-glow"></div>}
                   </div>
                   {errors.firstName && <p className="error-message">{errors.firstName}</p>}
                 </div>
@@ -91,10 +87,8 @@ export default function Login() {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    onFocus={() => setFocusedField('password')}
-                    onBlur={() => setFocusedField(null)}
                     placeholder="Create a secure password"
-                    className={`form-input password-input ${errors.password ? 'input-error' : ''} ${focusedField === 'password' ? 'input-focused' : ''}`}
+                    className={`form-input password-input ${errors.password ? 'input-error' : ''}`}
                   />
                   <button
                     type="button"
@@ -103,7 +97,6 @@ export default function Login() {
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                  {focusedField === 'password' && <div className="input-glow"></div>}
                 </div>
                 {errors.password && <p className="error-message">{errors.password}</p>}
               </div>

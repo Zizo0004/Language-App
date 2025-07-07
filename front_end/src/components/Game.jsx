@@ -4,9 +4,15 @@ import MultipleChoice from './question-types/MultipleChoice';
 import Pairing from './question-types/Pairing';
 import AudioQuestion from './question-types/AudioQuestion';
 import './Game.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Game = () => {
-  // Sample questions data - in a real app, this would come from an API or props
+  axios.get('http://127.0.0.1:8000/most_words/')
+  .then(respone => {
+    console.log(respone.data);
+  })
+
   const questions = [
     {
       id: 1,

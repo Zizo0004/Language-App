@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
-import Register from './components/Register';
 import Game from './components/Game';
 import Learn from './components/Learn';
 import MostWords from './components/MostWords';
@@ -24,20 +23,18 @@ function App() {
             path="/login" 
             element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/learn" />} 
           />
-          <Route 
-            path="/register" 
-            element={!isAuthenticated ? <Register /> : <Navigate to="/learn" />} 
-          />
+
           <Route path="/test" element={<Test />} />
 
           {/* Protected routes that redirect if not authenticated */}
           <Route 
             path="/learn" 
-            element={isAuthenticated ? <Learn /> : <Navigate to="/login" />} 
+            element={<Learn />}
+            /*element={isAuthenticated ? <Learn /> : <Navigate to="/login" />} */ 
           />
           <Route 
             path="/game" 
-            element={isAuthenticated ? <Game /> : <Navigate to="/login" />} 
+            element={<Game />} 
           />
           <Route 
             path="/most_words" 

@@ -1,39 +1,39 @@
 import React from 'react';
+import './test.css'; // Using test.css for styling
 import './Learn.css';
-import './Auth.css'; // Reusing auth styles for background
+import { useNavigate } from 'react-router-dom';
 
-const Learn = ({ navigateTo }) => {
+const Learn = () => {
+  const navigate = useNavigate(); 
   return (
-    <div className="learn-container">
-      <div className="auth-background">
-        <div className="grain-overlay"></div>
-        <div className="shape shape-1"></div>
-        <div className="shape shape-2"></div>
-        <div className="shape shape-3"></div>
+    <div className="signup-container">
+      <div className="background-overlay">
+        <div className="bg-circle bg-circle-1"></div>
+        <div className="bg-circle bg-circle-2"></div>
+        <div className="bg-circle bg-circle-3"></div>
       </div>
+      <div className="grid-pattern"></div>
 
-      <div className="learn-content">
-        <h1 className="learn-title">Learn</h1>
-        <p className="learn-subtitle">Choose a category to start learning</p>
+      <div className="content-wrapper">
+        <div className="learn-sections-new">
+          <div className="learn-card-new" onClick={() => navigate('/game')}>
+            <h2 className="learn-card-title">Commonly used words</h2>
+            <p className="learn-card-description"> The most frequent words in Arabic.</p>
+            <div className="progress-container">
+              <div className="progress-bar-new">
+                <div className="progress-new" style={{ width: '0%' }}></div>
+              </div>
+              <span>0/200</span>
+            </div>
+          </div>
 
-        <div className="learn-sections">
-  <div className="learn-section-card" onClick={() => navigateTo('game')}>
-    <h2>Most commonly used words</h2>
-    <p>These are the most commonly used words.</p>
-    <div className="progress-container">
-      <span>0/2000 completed</span>
-      <div className="progress-bar">
-        <div className="progress" style={{ width: '0%' }}></div>
+          <div className="learn-card-new disabled-card">
+            <h2 className="learn-card-title">Basic Sentences</h2>
+            <p className="learn-card-description">Learn to form and understand elementary level sentences.</p>
+            <span className="soon-text">Soon</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div className="learn-section-card" onClick={() => navigateTo('most_words')}>
-    <h2>Understanding sentences</h2>
-    <p>Learn how to form and understand sentences.</p>
-    </div>
-  </div>      
-</div>
     </div>
   );
 };
