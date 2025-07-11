@@ -1,9 +1,6 @@
 import React, { useState, useRef } from 'react';
 import ProgressBar from '../ProgressBar';
 import '../Game.css';
-// Import the sound files
-import correctSound from '../../assets/sounds/correct.mp3';
-import wrongSound from '../../assets/sounds/wrong.mp3';
 
 const AudioQuestion = ({ 
   question, 
@@ -22,8 +19,6 @@ const AudioQuestion = ({
   const [feedbackType, setFeedbackType] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const audioRef = useRef(null);
-  const correctSoundRef = useRef(null);
-  const wrongSoundRef = useRef(null);
 
   const handleOptionSelect = (option) => {
     if (isAnswered) return;
@@ -62,19 +57,9 @@ const AudioQuestion = ({
     if (correct) {
       setFeedbackMessage('Correct! Great job!');
       setFeedbackType('correct');
-      // Play correct sound
-      if (correctSoundRef.current) {
-        correctSoundRef.current.currentTime = 0;
-        correctSoundRef.current.play().catch(e => console.log('Error playing sound:', e));
-      }
     } else {
       setFeedbackMessage(`Incorrect. The correct answer is "${correctAnswer}".`);
       setFeedbackType('incorrect');
-      // Play wrong sound
-      if (wrongSoundRef.current) {
-        wrongSoundRef.current.currentTime = 0;
-        wrongSoundRef.current.play().catch(e => console.log('Error playing sound:', e));
-      }
     }
     
     setIsAnswered(true);
@@ -104,10 +89,6 @@ const AudioQuestion = ({
         currentQuestion={currentQuestion}
         totalQuestions={totalQuestions}
       />
-      
-      {/* Sound effects */}
-      <audio ref={correctSoundRef} src={correctSound} preload="auto" />
-      <audio ref={wrongSoundRef} src={wrongSound} preload="auto" />
       
       <h3 className="question-text">{question}</h3>
       

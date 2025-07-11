@@ -10,7 +10,8 @@ class most_popular_words(models.Model):
     word = models.CharField(max_length=50,primary_key=True)
     translation = models.CharField(max_length=50)
     answer = models.CharField(max_length=2,choices=answer)
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=None)
+    star = models.BooleanField(default=False)
     other = models.CharField(max_length=100,default='')
     audio = models.FileField(upload_to='word_audio/',blank=True,null=True)
 

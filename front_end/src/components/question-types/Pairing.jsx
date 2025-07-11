@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from '../ProgressBar';
 import '../Game.css';
-// Import the sound files
-import correctSound from '../../assets/sounds/correct.mp3';
-import wrongSound from '../../assets/sounds/wrong.mp3';
 
 const Pairing = ({ 
   question, 
@@ -22,8 +19,6 @@ const Pairing = ({
   const [isAnswered, setIsAnswered] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [feedbackType, setFeedbackType] = useState('');
-  const correctSoundRef = useRef(null);
-  const wrongSoundRef = useRef(null);
 
   // Shuffle the terms and translations on component mount
   useEffect(() => {
@@ -77,12 +72,6 @@ const Pairing = ({
         translation: translation.translation 
       }]);
       
-      // Play correct sound
-      if (correctSoundRef.current) {
-        correctSoundRef.current.currentTime = 0;
-        correctSoundRef.current.play().catch(e => console.log('Error playing sound:', e));
-      }
-      
       // Check if all pairs are matched
       const newMatchedPairs = [...matchedPairs, { term: term.term, translation: translation.translation }];
       if (newMatchedPairs.length === pairs.length) {
@@ -95,12 +84,6 @@ const Pairing = ({
         term: term.term,
         translation: translation.translation
       });
-      
-      // Play wrong sound
-      if (wrongSoundRef.current) {
-        wrongSoundRef.current.currentTime = 0;
-        wrongSoundRef.current.play().catch(e => console.log('Error playing sound:', e));
-      }
       
       // Remove the wrong pair class after animation completes
       setTimeout(() => {
@@ -153,10 +136,6 @@ const Pairing = ({
         currentQuestion={currentQuestion}
         totalQuestions={totalQuestions}
       />
-      
-      {/* Sound effects */}
-      <audio ref={correctSoundRef} src={correctSound} preload="auto" />
-      <audio ref={wrongSoundRef} src={wrongSound} preload="auto" />
       
       <h3 className="question-text">{question}</h3>
       
